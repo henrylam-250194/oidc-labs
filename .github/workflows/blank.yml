@@ -1,36 +1,29 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+# Sample workflow to access AWS resources when workflow is tied to branch
+# The workflow lists files in an AWS S3 bucket
+name: AWS example workflow
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push
+env:
+  BUCKET_NAME : "BUCKET-NAME"
+  AWS_REGION : "AWS-REGION"
+# permission can be added at job level or workflow level
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  S3ListFiles:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      # - name: Git clone the repository
+      #   uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        with:
+          role-to-assume: arn:aws:iam::509403202865:role/oidc-with-my-github
+          role-session-name: oidc-with-my-github
+          aws-region: ${{ env.AWS_REGION }}
+      # List files in AWS S3 bucket
+      - name: List files in S3
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          aws s3 ls
