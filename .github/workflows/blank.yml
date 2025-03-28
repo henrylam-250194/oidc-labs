@@ -4,8 +4,7 @@ name: AWS example workflow
 on:
   push
 env:
-  BUCKET_NAME : "BUCKET-NAME"
-  AWS_REGION : "AWS-REGION"
+  AWS_REGION : "ap-southeast-1"
 # permission can be added at job level or workflow level
 permissions:
   id-token: write   # This is required for requesting the JWT
