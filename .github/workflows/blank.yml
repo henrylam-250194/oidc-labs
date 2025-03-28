@@ -2,7 +2,7 @@
 # The workflow Creates static website using aws s3
 name: AWS example workflow
 on:
-  push
+  workflow_dispatch:
 env:
   AWS_REGION : "ap-southeast-1"
 # permission can be added at job level or workflow level
