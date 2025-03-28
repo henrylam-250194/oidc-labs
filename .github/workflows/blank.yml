@@ -17,8 +17,8 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::509403202865:role/GitHubActionsOIDCRole
           aws-region: ap-southeast-1  # or your region
-          # Ensure that the credentials are loaded correctly
           role-session-name: GitHubActionsSession
+          id-token: true  # Added to enable OIDC authentication
 
       - name: Deploy Application
         run: |
