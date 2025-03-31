@@ -6,6 +6,8 @@ on:
         description: 'Delete Infra'
         required: true
         default: "no"
+env:
+  AWS_REGION : "ap-southeast-1"
 permissions:
   id-token: write
   contents: read
@@ -44,7 +46,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::509403202865:role/oidc-test
           role-session-name: GitHubActionsSession
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
