@@ -12,32 +12,32 @@ permissions:
   id-token: write
   contents: read
 jobs:
-  # set-up:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     env: ${{ steps.set-env.outputs.ENV }}
-  #   steps:
-  #     - name: set env
-  #       id: set-env
-  #       run: | 
-  #        if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
-  #          echo "ENV=dev" >> $GITHUB_OUTPUT
-  #        elif [[ "${{ github.ref }}" =~ refs/heads/release/.* ]]; then
-  #          echo "ENV=qa" >> $GITHUB_OUTPUT
-  #        elif [[ "${{ github.ref }}" =~ refs/tags/v.* ]]; then
-  #          if [[ "${{ github.actor }}" == "henrylam-250194" ]]; then
-  #            echo "ENV=prod" >> $GITHUB_OUTPUT
-  #          else
-  #            echo "ENV=dev" >> $GITHUB_OUTPUT
-  #          fi
-  #        fi
-  #     - name: print
-  #       run: echo ${{ steps.set-env.outputs.ENV }}
+  set-up:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.set-env.outputs.ENV }}
+    steps:
+      - name: set env
+        id: set-env
+        run: | 
+          if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+            echo "ENV=dev" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/heads/release/.* ]]; then
+            echo "ENV=qa" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" =~ refs/tags/v.* ]]; then
+            if [[ "${{ github.actor }}" == "henrylam-250194" ]]; then
+              echo "ENV=prod" >> $GITHUB_OUTPUT
+            else
+              echo "ENV=dev" >> $GITHUB_OUTPUT
+            fi
+          fi
+      - name: print
+        run: echo ${{ steps.set-env.outputs.ENV }}
   
   deploy-infra:
-    # needs: set-up
+    needs: set-up
     runs-on: ubuntu-latest
-    # environment: ${{ needs.set-up.outputs.env }}
+    environment: ${{ needs.set-up.outputs.env }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v4
