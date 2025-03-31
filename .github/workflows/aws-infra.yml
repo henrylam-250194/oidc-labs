@@ -65,7 +65,7 @@ jobs:
           terraform apply -auto-approve
         working-directory: ./aws-infra/env/dev
       - name: delete infra
-        if: ${{ inputs.variable_input == 'yes' }}
+        if: ${{ inputs.delete_infra == 'yes' }}
         run: |
           terraform destroy -auto-approve
         working-directory: ./aws-infra/env/dev
