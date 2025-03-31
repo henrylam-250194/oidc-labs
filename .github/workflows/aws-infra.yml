@@ -1,17 +1,43 @@
-# Sample workflow to access AWS resources when workflow is tied to branch
-# The workflow Creates static website using aws s3
 name: AWS Auth example workflow
 on:
   workflow_dispatch:
+    inputs:
+      delete_infra:
+        description: 'Delete Infra'
+        required: true
+        default: "no"
 env:
   AWS_REGION : "ap-southeast-1"
-# permission can be added at job level or workflow level
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write
+  contents: read
 jobs:
-  ListS3Buckets:
+  set-up:
     runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.set-env.outputs.ENV }}
+    steps:
+      - name: set env
+        id: set-env
+        run: | 
+         if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+           echo "ENV=dev" >> $GITHUB_OUTPUT
+         elif [[ "${{ github.ref }}" =~ refs/heads/release/.* ]]; then
+           echo "ENV=qa" >> $GITHUB_OUTPUT
+         elif [[ "${{ github.ref }}" =~ refs/tags/v.* ]]; then
+           if [[ "${{ github.actor }}" == "henrylam-250194" ]]; then
+             echo "ENV=prod" >> $GITHUB_OUTPUT
+           else
+             echo "ENV=dev" >> $GITHUB_OUTPUT
+           fi
+         fi
+      - name: print
+        run: echo ${{ steps.set-env.outputs.ENV }}
+  
+  deploy-infra:
+    needs: set-up
+    runs-on: ubuntu-latest
+    environment: ${{ needs.set-up.outputs.env }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v4
@@ -33,4 +59,13 @@ jobs:
       - name: Plan Terraform
         run: |
           terraform plan
+        working-directory: ./aws-infra/env/dev
+      - name: Apply Terraform
+        run: |
+          terraform apply -auto-approve
+        working-directory: ./aws-infra/env/dev
+      - name: delete infra
+        if: ${{ inputs.variable_input == 'yes' }}
+        run: |
+          terraform destroy -auto-approve
         working-directory: ./aws-infra/env/dev
