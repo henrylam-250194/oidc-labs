@@ -60,12 +60,12 @@ jobs:
         run: |
           terraform plan
         working-directory: ./aws-infra/env/dev
-      - name: Apply Terraform
-        run: |
-          terraform apply -auto-approve
-        working-directory: ./aws-infra/env/dev
-      - name: delete infra
-        if: ${{ inputs.variable_input == 'yes' }}
-        run: |
-          terraform destroy -auto-approve
-        working-directory: ./aws-infra/env/dev
+      # - name: Apply Terraform
+      #   run: |
+      #     terraform apply -auto-approve
+      #   working-directory: ./aws-infra/env/dev
+      # - name: delete infra
+      #   if: ${{ inputs.variable_input == 'yes' }}
+      #   run: |
+      #     terraform destroy -auto-approve
+      #   working-directory: ./aws-infra/env/dev
