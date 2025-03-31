@@ -22,8 +22,15 @@ jobs:
           role-session-name: GitHubActionsSession
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
-      - name: Apply Terraform code for each environment
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.1
+      - name: Initialize Terraform
         run: |
-          cd aws-infra/env/dev
           terraform init
+        working-directory: ./aws-infra/env/dev
+      - name: Plan Terraform
+        run: |
           terraform plan
+        working-directory: ./aws-infra/env/dev
