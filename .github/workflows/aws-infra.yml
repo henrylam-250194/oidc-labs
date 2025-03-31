@@ -1,4 +1,4 @@
-name: AWS Auth example workflow
+name: AWS infra Deployment workflow
 on:
   workflow_dispatch:
     inputs:
