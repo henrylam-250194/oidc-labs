@@ -1,6 +1,6 @@
 #ec2 configuration
 instance_type             = "t2.micro"
-ami_id                    = "ami-053b0d53c279acc90"
+ami_id                    = "ami-06661384e66f2da0e"
 key_name                  = "oidc-labs-key"
 instance_tag              = "ec2-instance"
 environment               = "dev"
