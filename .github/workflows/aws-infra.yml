@@ -44,9 +44,9 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::509403202865:role/oidc-test
-          role-session-name: GitHubActionsSession
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::509403202865:role/2st-role
+          role-session-name: GitHubActionsSession2
+          aws-region: ${{ secrets.AWS_REGION }}
       # Upload a file to AWS s3
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
