@@ -7,7 +7,7 @@ module "ec2_instance" {
   key_name       = var.key_name
   instance_tag   = var.instance_tag
   environment    = var.environment
-
+  
 }
 
 module "vpc" {
