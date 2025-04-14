@@ -46,7 +46,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::509403202865:role/2st-role
           role-session-name: GitHubActionsSession2
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ap-southeast-1
       # Upload a file to AWS s3
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
