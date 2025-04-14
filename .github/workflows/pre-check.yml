@@ -52,7 +52,7 @@ jobs:
 
     strategy:
       matrix:
-        env: [dev, stg]
+        env: [dev]
 
     defaults:
       run:
